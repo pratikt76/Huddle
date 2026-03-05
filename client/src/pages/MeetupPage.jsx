@@ -203,6 +203,11 @@ export default function MeetupPage() {
 
             {/* Sidebar */}
             <div className={`meetup-sidebar ${sidebarOpen ? 'open' : ''}`}>
+                {/* Drag handle specifically for mobile */}
+                <div className="sidebar-handle" onClick={() => setSidebarOpen(!sidebarOpen)}>
+                    <div className="handle-bar"></div>
+                </div>
+
                 {identity && (
                     <div className="identity-card">
                         <div className="identity-avatar" style={{ background: identity.color }}>
