@@ -11,16 +11,19 @@ const app = express();
 const server = http.createServer(app);
 
 const PORT = process.env.PORT || 3001;
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+const CLIENT_URL = process.env.CLIENT_URL || '*';
 
-const io = new Server(server, {
-    cors: {
-        origin: CLIENT_URL,
-        methods: ['GET', 'POST']
-    }
-});
+// Parse allowed origins (supports comma-separated values)
+const allowedOrigins = CLIENT_URL === '*' ? '*' : CLIENT_URL.split(',').map(u => u.trim());
 
-app.use(cors({ origin: CLIENT_URL }));
+const corsOptions = {
+    origin: allowedOrigins === '*' ? true : allowedOrigins,
+    methods: ['GET', 'POST']
+};
+
+const io = new Server(server, { cors: corsOptions });
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Participant colors palette
